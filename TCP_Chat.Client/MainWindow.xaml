@@ -1,0 +1,58 @@
+﻿<Window x:Class="TCP_Chat.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TCP_Chat.Client"
+        
+        Title="MainWindow" 
+        
+        Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="MessageDataTemplate" 
+                          DataType="{x:Type local:Message}">
+                <TextBlock Text="{Binding Content}"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    
+    <DockPanel LastChildFill="True">
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Top">
+            <Label Target="{Binding ElementName=InputIP}"
+                   Content="IP"/>
+            <TextBox x:Name="InputIP"
+                     Text="{Binding IP}"/>
+            
+            <Label Target="{Binding ElementName=InputPort}"
+                   Content="Port"/>
+            <TextBox x:Name="InputPort"
+                     Text="{Binding Port}"/>
+            
+            <Label Target="{Binding ElementName=InputName}"
+                   Content="Имя"/>
+            <TextBox x:Name="InputName"
+                     Text="{Binding Name}"/>
+            
+            <Button Content="Подключиться"
+                    Command="{Binding CommandConnect}"/>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Bottom">
+            <Label Target="{Binding ElementName=InputMessage}"
+                   Content="Сообщение"/>
+            <TextBox x:Name="InputMessage"
+                     Text="{Binding Message}"/>
+            
+            <Button Content="Отправить"
+                    Command="{Binding CommandSend}"/>
+        </StackPanel>
+        
+        <ListBox ItemsSource="{Binding Messages}"
+                 ItemTemplate="{StaticResource MessageDataTemplate}"/>
+    </DockPanel>
+</Window>
