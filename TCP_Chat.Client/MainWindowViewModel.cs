@@ -13,14 +13,12 @@ public class MainWindowViewModel : ViewModelBase
 {
     private Socket _server;
     private NetworkStream _networkStream;
-    private IPAddress _ip;
-    private int _port;
     
     public ObservableCollection<Message> Messages { get; } = [];
 
-    [Reactive] public string? IP { get; set;}
-    [Reactive] public string? Port { get; set;}
-    [Reactive] public string? Name { get; set;}
+    [Reactive] public string? IP { get; set;} = "127.0.0.1";
+    [Reactive] public string? Port { get; set; } = "65000";
+    [Reactive] public string? Name { get; set; } = "anst";
     [Reactive] public string? Message { get; set;}//FIXME
     
     public ReactiveCommand<Unit, Unit> CommandConnect { get;}
@@ -34,10 +32,10 @@ public class MainWindowViewModel : ViewModelBase
 
     private async Task ConnectAsync() //FIXME
     {
-        _ip = IPAddress.Parse(IP);
-        _port = int.Parse(Port);
+        var ip = IPAddress.Parse(IP);
+        var port = int.Parse(Port);
         _server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        await _server.ConnectAsync(_ip, _port);
+        await _server.ConnectAsync(ip, port);
         
         _networkStream = new NetworkStream(_server);
         

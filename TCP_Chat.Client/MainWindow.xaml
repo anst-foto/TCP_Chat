@@ -8,6 +8,20 @@
         Height="450" Width="800">
     <Window.Resources>
         <ResourceDictionary>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="10 5"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            
             <DataTemplate x:Key="MessageDataTemplate" 
                           DataType="{x:Type local:Message}">
                 <TextBlock Text="{Binding Content}"/>
@@ -25,32 +39,42 @@
             <Label Target="{Binding ElementName=InputIP}"
                    Content="IP"/>
             <TextBox x:Name="InputIP"
-                     Text="{Binding IP}"/>
+                     Text="{Binding IP}"
+                     Width="75"/>
             
             <Label Target="{Binding ElementName=InputPort}"
                    Content="Port"/>
             <TextBox x:Name="InputPort"
-                     Text="{Binding Port}"/>
+                     Text="{Binding Port}"
+                     Width="50"/>
             
             <Label Target="{Binding ElementName=InputName}"
                    Content="Имя"/>
             <TextBox x:Name="InputName"
-                     Text="{Binding Name}"/>
+                     Text="{Binding Name}"
+                     Width="100"/>
             
             <Button Content="Подключиться"
                     Command="{Binding CommandConnect}"/>
         </StackPanel>
         
-        <StackPanel Orientation="Horizontal"
-                    DockPanel.Dock="Bottom">
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <Label Target="{Binding ElementName=InputMessage}"
-                   Content="Сообщение"/>
+                   Content="Сообщение"
+                   Grid.Column="0"/>
             <TextBox x:Name="InputMessage"
-                     Text="{Binding Message}"/>
+                     Text="{Binding Message}"
+                     Grid.Column="1"/>
             
             <Button Content="Отправить"
-                    Command="{Binding CommandSend}"/>
-        </StackPanel>
+                    Command="{Binding CommandSend}"
+                    Grid.Column="2"/>
+        </Grid>
         
         <ListBox ItemsSource="{Binding Messages}"
                  ItemTemplate="{StaticResource MessageDataTemplate}"/>

@@ -23,8 +23,8 @@ var clientStream = new NetworkStream(client);
 while (true)
 {
     var buffer = new byte[512];
-    await clientStream.ReadAsync(buffer);
-    var json = Encoding.UTF8.GetString(buffer);
+    var size = await clientStream.ReadAsync(buffer);
+    var json = Encoding.UTF8.GetString(buffer, 0, size);
     var message = JsonSerializer.Deserialize<Message>(json);//FIXME
     switch (message.Type)
     {
