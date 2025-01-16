@@ -11,7 +11,7 @@ namespace TCP_Chat.Client;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private Socket _server;
+    private TcpClient _server;
     private NetworkStream _networkStream;
     
     public ObservableCollection<Message> Messages { get; } = [];
@@ -34,10 +34,10 @@ public class MainWindowViewModel : ViewModelBase
     {
         var ip = IPAddress.Parse(IP);
         var port = int.Parse(Port);
-        _server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        _server = new TcpClient();
         await _server.ConnectAsync(ip, port);
         
-        _networkStream = new NetworkStream(_server);
+        _networkStream = _server.GetStream();
         
         var message = new Message(Name, MessageType.Connect, "null");
         var json = JsonSerializer.Serialize(message);

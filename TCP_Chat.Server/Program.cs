@@ -13,16 +13,15 @@ var config = new ConfigurationBuilder()
 var port = int.Parse(config.GetConnectionString("ServerPort"));//FIXME
 
 var ip = new IPEndPoint(IPAddress.Any, port);
-var server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-server.Bind(ip);
-server.Listen(1);
+var server = new TcpListener(ip);
+server.Start();
 
-var client = await server.AcceptAsync();
-var clientStream = new NetworkStream(client);
+var client = await server.AcceptTcpClientAsync();
+var clientStream = client.GetStream();
 
 while (true)
 {
-    var buffer = new byte[512];
+    var buffer = new byte[250];
     var size = await clientStream.ReadAsync(buffer);
     var json = Encoding.UTF8.GetString(buffer, 0, size);
     var message = JsonSerializer.Deserialize<Message>(json);//FIXME
@@ -34,7 +33,7 @@ while (true)
         case MessageType.Disconnect:
             clientStream.Close();
             client.Close();
-            server.Close();
+            server.Stop();
             return;//TODO
         case MessageType.Text:
             Console.WriteLine($"Сообщение от {message.SenderName}: {message.Content}");
