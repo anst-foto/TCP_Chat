@@ -43,6 +43,17 @@ public class MainWindowViewModel : ViewModelBase
         var json = JsonSerializer.Serialize(message);
         var buffer = Encoding.UTF8.GetBytes(json);
         await _networkStream.WriteAsync(buffer);
+        await _networkStream.FlushAsync();
+        
+            while (true)
+            {
+                var buffer2 = new byte[256];
+                var size = await _networkStream.ReadAsync(buffer2);
+                var json2 = Encoding.UTF8.GetString(buffer2, 0, size);
+                var message2 = JsonSerializer.Deserialize<Message>(json2);
+                
+                Messages.Add(message2);
+            }
     }
     
     private async Task SendAsync() //FIXME
